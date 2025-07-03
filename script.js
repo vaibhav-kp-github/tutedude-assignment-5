@@ -1,8 +1,12 @@
+// for current date and time 
+
 var dt = new Date();
 var time = dt.getHours() + ":" + dt.getMinutes();
 
 document.getElementById("date").innerHTML = dt.toDateString();
 document.getElementById("time").innerHTML = time;
+
+//for not refresh the page  or refresh the the others city current weather
 
 const form = document.querySelector("form");
 const searchInput = document.getElementById("fcity");
@@ -20,6 +24,9 @@ form.addEventListener("submit", function (e) {
   searchInput.value = ""; // Clear the input field after action
 });
 
+
+// for search the city current weather
+
 function getWeather(city) {
   const apiKey = "789934960413b3939e6461e2278f75cd";
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
@@ -33,24 +40,25 @@ function getWeather(city) {
     })
     .then((data) => {
       console.log(data);
-      document.getElementById(
-        "city-temp"
-      ).innerHTML = `${data.name} Temperature`;
+      const sunriseTime = new Date(data.sys.sunrise * 1000).getHours() + ":" + dt.getMinutes() + "am";
+      const sunsetTime = new Date(data.sys.sunset * 1000).getHours() + ":" + dt.getMinutes() + "pm";
+
+      document.getElementById("sun-rise").innerHTML = sunriseTime;
+      document.getElementById("sun-set").innerHTML = sunsetTime;
+      document.getElementById("weather-image").src = `https://openweathermap.org/img/wn/${data.weather[0].icon + ".png"}`;
+      document.getElementById("city-temp").innerHTML = `${data.name} Temperature`;
       document.getElementById("tmp").innerHTML = data.main.temp;
       document.getElementById("mn-t").innerHTML = data.main.temp_min + "°C";
       document.getElementById("mx-t").innerHTML = data.main.temp_max + "°C";
 
-      document.getElementById(
-        "city-humidity"
-      ).innerHTML = `${data.name} Humidity`;
+      document.getElementById("city-humidity").innerHTML = `${data.name} Humidity`;
       document.getElementById("hmd").innerHTML = data.main.humidity;
       document.getElementById("hmd1").innerHTML = data.main.feels_like + "°C";
       document.getElementById("hmd2").innerHTML = data.weather[0].description;
 
       document.getElementById("city-wind").innerHTML = `${data.name} Wind Info`;
       document.getElementById("wnd").innerHTML = data.wind.speed;
-      document.getElementById("wind-degree").innerHTML =
-        "Degree: " + data.wind.deg + "°";
+      document.getElementById("wind-degree").innerHTML = "Degree: " + data.wind.deg + "°";
       document.getElementById("wind-direction").innerHTML =
         "Direction: " + getWindDirection(data.wind.deg);
     })
@@ -59,6 +67,8 @@ function getWeather(city) {
       alert("Please enter a valid city name.");
     });
 }
+
+// for getting other cities live weather data
 
 function getWindDirection(deg) {
   const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
