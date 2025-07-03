@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Weather app</title>
+    <link rel="shortcut icon" href="./image/weather.png" type="image/png" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-dark-subtle fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <img src="./image/logo.png" width="30" height="30" alt="" srcset="" />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Dropdown
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="#">Something else here</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+            </li>
+          </ul>
+          <div id="clock" class="text-end">
+              <p id="date" class="my-0"></p>
+              <p id="time" class="my-0"></p>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container" style="margin-top: 6rem">
+        <form class="d-flex w-100 justify-content-center my-5" role="search">
+            <input
+              class="form-control me-2 w-50"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+              id="fcity"
+            />
+            <button class="btn btn-outline-success" id="searchBtn"  type="submit">
+              Search
+            </button>
+          </form>
+
+      <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal">
+                <span id="city-temp">Temperature</span>
+              </h4>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title pricing-card-title">
+                <span id="tmp">--</span
+                ><small class="text-body-secondary fw-light">°C</small>
+              </h1>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>
+                  Min-temperature <span id="mn-t" class="text-primary"></span>
+                </li>
+                <li>
+                  Max-temperature <span id="mx-t" class="text-primary"></span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal">
+                <span id="city-humidity">Humidity</span>
+              </h4>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title pricing-card-title">
+                <span id="hmd">--</span
+                ><small class="text-body-secondary fw-light">%</small>
+              </h1>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>
+                  The weather feels like
+                  <span id="hmd1" class="text-primary"></span>
+                </li>
+                <li>
+                  weather condition <span id="hmd2" class="text-primary"></span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal">
+                <span id="city-wind">Wind Info</span>
+              </h4>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title pricing-card-title">
+                <span id="wnd">--</span
+                ><small class="text-body-secondary fw-light">km/h</small>
+              </h1>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>
+                  wind-degree
+                  <span id="wind-degree" class="text-primary"></span>
+                </li>
+                <li>
+                  wind-direction
+                  <span id="wind-direction" class="text-primary"></span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="display-6 text-center mb-4 text-bold">Live Weather Data</h2>
+      <div class="table-responsive">
+        <table class="table text-center" id="city-weather-table">
+          <thead>
+            <tr>
+              <th class="text-nowrap">City</th>
+              <th class="text-nowrap">Temperature (°C)</th>
+              <th class="text-nowrap">Humidity (%)</th>
+              <th class="text-nowrap">Feels Like (°C)</th>
+              <th class="text-nowrap">Weather</th>
+              <th class="text-nowrap">Wind Speed (km/h)</th>
+              <th class="text-nowrap">Wind Direction</th>
+            </tr>
+          </thead>
+          <tbody id="weather-table-body">
+            <!-- Dynamic rows go here -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <footer class="container pt-4 my-md-5 pt-md-5 border-top">
+      <div class="row">
+        <div class="col-12 col-md">
+          <img
+            class="mb-2"
+            src="./image/logo.png"
+            alt=""
+            width="24"
+            height="19"
+          />
+          <small class="d-block mb-3 text-body-secondary">© 2025</small>
+        </div>
+        <div class="col-6 col-md">
+          <h5>Features</h5>
+          <ul class="list-unstyled text-small">
+            <li class="mb-1">
+              <a class="link-secondary text-decoration-none" href="#"
+                >Cool stuff</a
+              >
+            </li>
+            <li class="mb-1">
+              <a class="link-secondary text-decoration-none" href="#"
+                >Random feature</a
+              >
+            </li>
+            <li class="mb-1">
+              <a class="link-secondary text-decoration-none" href="#"
+                >Team feature</a
+              >
+            </li>
+            <li class="mb-1">
+              <a class="link-secondary text-decoration-none" href="#"
+                >Stuff for developers</a
+              >
+            </li>
+            <li class="mb-1">
+              <a class="link-secondary text-decoration-none" href="#"
+                >Another one</a
+              >
+            </li>
+            <li class="mb-1">
+              <a class="link-secondary text-decoration-none" href="#"
+                >Last time</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="col-6 col-md">
+          <h5>Resources</h5>
+          <ul class="list-unstyled text-small">
+            <li class="mb-1">
+              <a class="link-secondary text-decoration-none" href="#"
+                >Resource</a
+              >
+            </li>
+            <li class="mb-1">
+              <a class="link-secondary text-decoration-none" href="#"
+                >Resource name</a
+              >
+            </li>
+            <li class="mb-1">
+              <a class="link-secondary text-decoration-none" href="#"
+                >Another resource</a
+              >
+            </li>
+            <li class="mb-1">
+              <a class="link-secondary text-decoration-none" href="#"
+                >Final resource</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="col-6 col-md">
+          <h5>About</h5>
+          <ul class="list-unstyled text-small">
+            <li class="mb-1">
+              <a class="link-secondary text-decoration-none" href="#">Team</a>
+            </li>
+            <li class="mb-1">
+              <a class="link-secondary text-decoration-none" href="#"
+                >Locations</a
+              >
+            </li>
+            <li class="mb-1">
+              <a class="link-secondary text-decoration-none" href="#"
+                >Privacy</a
+              >
+            </li>
+            <li class="mb-1">
+              <a class="link-secondary text-decoration-none" href="#">Terms</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
