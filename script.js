@@ -1,10 +1,12 @@
 // for current date and time 
 
-var dt = new Date();
-var time = dt.getHours() + ":" + dt.getMinutes();
-
-document.getElementById("date").innerHTML = dt.toDateString();
-document.getElementById("time").innerHTML = time;
+function updateClock() {
+  const now = new Date();
+  document.getElementById("date").innerHTML = now.toDateString();
+  document.getElementById("time").innerHTML = now.getHours() + ":" + now.getMinutes();
+}
+setInterval(updateClock, 1000);
+updateClock();
 
 //for not refresh the page  or refresh the the others city current weather
 
@@ -18,7 +20,7 @@ form.addEventListener("submit", function (e) {
   if (city) {
     getWeather(city); // If city is entered, show its weather
   } else {
-    loadMultipleCitiesWeather(); // Else, refresh default cities
+    alert("Please enter a city name."); // Alert if no city is entered
   }
 
   searchInput.value = ""; // Clear the input field after action
@@ -40,11 +42,12 @@ function getWeather(city) {
     })
     .then((data) => {
       console.log(data);
-      const sunriseTime = new Date(data.sys.sunrise * 1000).getHours() + ":" + dt.getMinutes() + "am";
-      const sunsetTime = new Date(data.sys.sunset * 1000).getHours() + ":" + dt.getMinutes() + "pm";
+      const sunriseTime = new Date(data.sys.sunrise * 1000);
+      const sunsetTime = new Date(data.sys.sunset * 1000);
 
-      document.getElementById("sun-rise").innerHTML = sunriseTime;
-      document.getElementById("sun-set").innerHTML = sunsetTime;
+      document.getElementById("sun-rise").innerHTML = sunriseTime.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit",});
+      document.getElementById("sun-set").innerHTML = sunsetTime.toLocaleTimeString([], {hour: "2-digit",minute: "2-digit", });
+
       document.getElementById("weather-image").src = `https://openweathermap.org/img/wn/${data.weather[0].icon + ".png"}`;
       document.getElementById("city-temp").innerHTML = `${data.name} Temperature`;
       document.getElementById("tmp").innerHTML = data.main.temp;
@@ -67,6 +70,19 @@ function getWeather(city) {
       alert("Please enter a valid city name.");
     });
 }
+
+getWeather("pune")
+
+document.getElementById("refreshBtn").addEventListener("click", () => {
+  const lastCityName = document
+    .getElementById("city-temp")
+    .innerText.split(" ")[0];
+  if (lastCityName && lastCityName !== "Temperature") {
+    getWeather(lastCityName); // Re-fetch current city weather
+  } else {
+    getWeather("Pune"); // fallback city
+  }
+});
 
 // for getting other cities live weather data
 
@@ -100,13 +116,13 @@ function loadMultipleCitiesWeather() {
       .then((data) => {
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td class="text-nowrap">${data.name}</td>
-          <td class="text-nowrap">${data.main.temp}</td>
-          <td class="text-nowrap">${data.main.humidity}</td>
-          <td class="text-nowrap">${data.main.feels_like}</td>
-          <td class="text-nowrap">${data.weather[0].description}</td>
-          <td class="text-nowrap">${data.wind.speed}</td>
-          <td class="text-nowrap">${getWindDirection(data.wind.deg)}</td>
+          <td class="text-nowrap align-content-center text-start">${data.name}</td>
+          <td class="text-nowrap align-content-center">${data.main.temp}</td>
+          <td class="text-nowrap align-content-center">${data.main.humidity}</td>
+          <td class="text-nowrap align-content-center">${data.main.feels_like}</td>
+          <td class="text-nowrap align-content-center"><img class="image-fluid" src="https://openweathermap.org/img/wn/${data.weather[0].icon + ".png"}"></td>
+          <td class="text-nowrap align-content-center">${data.wind.speed}</td>
+          <td class="text-nowrap align-content-center">${getWindDirection(data.wind.deg)}</td>
         `;
         tbody.appendChild(row);
       })
